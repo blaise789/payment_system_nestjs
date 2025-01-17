@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { PaymentModule } from './payment/payment.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './payment/entities/payment.entity';
+import { User } from './payment/entities/user.entity';
 
 @Module({
   imports: [
@@ -9,9 +10,11 @@ import { Payment } from './payment/entities/payment.entity';
       type: 'mysql',
       host: 'mysqldb',
       port: 3307,
-      password: '123',
+      username: 'root',
+      password: 'Blaise@123',
       database: 'payment_system',
-      entities: [Payment],
+      entities: [Payment, User],
+      synchronize: true,
     }),
     PaymentModule,
   ],

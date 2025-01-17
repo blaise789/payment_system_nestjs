@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { User } from './user.entity';
 
 @Entity({ name: 'payments' })
 export class Payment {
@@ -6,4 +7,7 @@ export class Payment {
   id: string;
   @Column('float')
   amount: number;
+  // User target entity (user) target relationship mapping
+  @ManyToOne(() => User, (user) => user.payments)
+  userId: string;
 }
