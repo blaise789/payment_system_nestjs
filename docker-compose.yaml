@@ -26,6 +26,13 @@ services:
      
 
     
+  mysqldb:
+    image: mysql
+    ports:
+      - '3307:3307'
+    environment:
+      - MYSQL_ROOT_PASSWORD=Blaise@123
+      - MYSQL_DATABASE=payment_system 
+      - MYSQL_TCP_PORT=3307
 
-     
     
