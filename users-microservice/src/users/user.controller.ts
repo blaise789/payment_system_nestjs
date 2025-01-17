@@ -15,4 +15,9 @@ export class UserMicroserviceController {
   async handlePaymentCreated(@Payload() data: any) {
     console.log('Payment Created:', data);
   }
+  @MessagePattern('getUserById')
+  async getUserById(@Payload() userId: string) {
+    const user = await this.userService.getUserById(userId);
+    return user;
+  }
 }

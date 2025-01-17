@@ -5,16 +5,17 @@ import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
-    UserModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'mysqldb',
+      username: 'root',
       port: 3307,
-      password: '123',
+      password: 'Blaise@123',
       database: 'payment_system',
       entities: [User],
       synchronize: true,
     }),
+    UserModule,
   ],
   controllers: [],
   providers: [],

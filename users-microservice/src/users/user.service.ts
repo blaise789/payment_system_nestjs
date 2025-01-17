@@ -6,6 +6,9 @@ import { CreateUserDto } from './dtos/create-user.dto';
 
 @Injectable()
 export class UserService {
+  getUserById(userID: string) {
+    return this.userRepository.findOneBy({ userID });
+  }
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
