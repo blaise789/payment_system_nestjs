@@ -11,12 +11,17 @@ export class PaymentMicroserviceController {
   ) {}
   @MessagePattern('create_payment')
   async createPayment(@Payload() payment: PaymentDto) {
-    const newPayment = await this.paymentService.createPayment(payment);
-    if (newPayment) {
-      this.natsClient.emit('payment_created', newPayment);
-      console.log(payment);
-      return 'payment created successfully';
+    try {
+      const newPayment = await this.paymentService.createPayment(payment);
+      console.log(newPayment);
+      if (newPayment) {
+        this.natsClient.emit('payment_created', newPayment);
+        return 'payment created successfully';
+      }
+      return 'payment cannot be created';
+    } catch (err: any) {
+      console.log(err.message);
+      return err.message;
     }
-    return 'payment cannot be created';
   }
 }

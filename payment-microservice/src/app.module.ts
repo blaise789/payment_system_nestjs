@@ -3,6 +3,7 @@ import { PaymentModule } from './payment/payment.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './payment/entities/payment.entity';
 import { User } from './payment/entities/user.entity';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -17,6 +18,9 @@ import { User } from './payment/entities/user.entity';
       synchronize: true,
     }),
     PaymentModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
   ],
   controllers: [],
   providers: [],

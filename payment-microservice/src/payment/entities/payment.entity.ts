@@ -8,6 +8,8 @@ export class Payment {
   @Column('float')
   amount: number;
   // User target entity (user) target relationship mapping
+  sessionId: string;
   @ManyToOne(() => User, (user) => user.payments)
   userId: string;
+  status: string;
 }
