@@ -1,4 +1,4 @@
-import { Controller, Inject } from '@nestjs/common';
+import { Controller, Inject, Post } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { PaymentDto } from './dtos/payment.dto';
 import { PaymentService } from './payment.service';
@@ -12,16 +12,22 @@ export class PaymentMicroserviceController {
   @MessagePattern('create_payment')
   async createPayment(@Payload() payment: PaymentDto) {
     try {
-      const newPayment = await this.paymentService.createPayment(payment);
-      console.log(newPayment);
-      if (newPayment) {
-        this.natsClient.emit('payment_created', newPayment);
-        return 'payment created successfully';
-      }
-      return 'payment cannot be created';
+      const session = await this.paymentService.createPayment(payment);
+      // console.log(newPayment);
+      // if (newPayment) {
+      //   this.natsClient.emit('payment_created', newPayment);
+      //   return 'payment created successfully';
+      // }
+      // return 'payment cannot be created';
+      return session;
     } catch (err: any) {
       console.log(err.message);
       return err.message;
     }
+  }
+  @Post('/webhook')
+  async webhookHandler(@Payload() payload: any) {
+    console.log('Received webhook:', payload);
+    return { status: 'OK' };
   }
 }

@@ -9,7 +9,7 @@ export class PaymentController {
   ) {}
   @Post()
   createPayment(@Body() payment: PaymentDto) {
-    this.natsClient.emit('payment_created', payment);
+    // this.natsClient.emit('payment_created', payment);
     return this.natsClient.send('create_payment', payment);
   }
 }

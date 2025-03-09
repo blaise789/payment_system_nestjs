@@ -8,8 +8,10 @@ export class Payment {
   @Column('float')
   amount: number;
   // User target entity (user) target relationship mapping
-  sessionId: string;
+  @Column()
+  stripeSessionId: string;
   @ManyToOne(() => User, (user) => user.payments)
   userId: string;
+  @Column()
   status: string;
 }

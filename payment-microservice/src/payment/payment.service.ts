@@ -24,6 +24,10 @@ export class PaymentService {
       this.natsClient.send('getUserById', payment.userId),
     );
     console.log(user);
+    console.log(
+      'Stripe Secret:',
+      this.configService.get<string>('STRIPE_SECRET_KEY'),
+    );
     if (!user) {
       return null;
     }
@@ -51,11 +55,13 @@ export class PaymentService {
         },
       });
 
-      return this.paymentRepository.create({
+      const newPayment = this.paymentRepository.create({
         ...payment,
-        sessionId: session.id,
+        stripeSessionId: session.id,
         status: 'pending',
       });
+      await this.paymentRepository.save(newPayment);
+      return { url: session.url };
     } catch (err: any) {
       throw new BadRequestException(`Payment failed: ${err.message}`);
     }

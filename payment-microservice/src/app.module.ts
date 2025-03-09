@@ -19,6 +19,7 @@ import { ConfigModule } from '@nestjs/config';
     }),
     PaymentModule,
     ConfigModule.forRoot({
+      envFilePath: '.env',
       isGlobal: true,
     }),
   ],

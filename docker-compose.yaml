@@ -16,6 +16,8 @@ services:
       - ./users-microservice/node_modules:/usr/src/app/node_modules
   payment_microservice:
     build: ./payment-microservice/
+    env_file:
+      - ./payment-microservice/.env
     volumes:
       - ./payment-microservice/src:/usr/src/app/src
       - ./payment-microservice/node_modules:/usr/src/app/node_modules
