@@ -1,17 +1,44 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from './user.entity';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
-@Entity({ name: 'payments' })
+@Entity('payments')
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
   id: string;
-  @Column('float')
+
+  @Column()
+  userId: string;
+
+  @Column('decimal', { precision: 10, scale: 2 })
   amount: number;
-  // User target entity (user) target relationship mapping
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  currency: string;
+
+  @Column({ nullable: true })
+  description: string;
+
   @Column()
   stripeSessionId: string;
-  @ManyToOne(() => User, (user) => user.payments)
-  userId: string;
-  @Column()
+
+  @Column({
+    type: 'enum',
+    enum: ['pending', 'completed', 'failed', 'refunded'],
+    default: 'pending',
+  })
   status: string;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

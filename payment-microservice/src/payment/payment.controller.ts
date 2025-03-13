@@ -1,7 +1,8 @@
-import { Controller, Inject, Post } from '@nestjs/common';
+import { Controller, Inject } from '@nestjs/common';
 import { ClientProxy, MessagePattern, Payload } from '@nestjs/microservices';
 import { PaymentDto } from './dtos/payment.dto';
 import { PaymentService } from './payment.service';
+import Stripe from 'stripe';
 
 @Controller()
 export class PaymentMicroserviceController {
@@ -9,25 +10,26 @@ export class PaymentMicroserviceController {
     @Inject('NATS_SERVICE') private readonly natsClient: ClientProxy,
     private readonly paymentService: PaymentService,
   ) {}
+
   @MessagePattern('create_payment')
   async createPayment(@Payload() payment: PaymentDto) {
     try {
       const session = await this.paymentService.createPayment(payment);
-      // console.log(newPayment);
-      // if (newPayment) {
-      //   this.natsClient.emit('payment_created', newPayment);
-      //   return 'payment created successfully';
-      // }
-      // return 'payment cannot be created';
       return session;
     } catch (err: any) {
       console.log(err.message);
-      return err.message;
+      return { error: err.message };
     }
   }
-  @Post('/webhook')
-  async webhookHandler(@Payload() payload: any) {
-    console.log('Received webhook:', payload);
-    return { status: 'OK' };
+
+  @MessagePattern('process_payment_webhook')
+  async processWebhook(@Payload() event: Stripe.Event) {
+    try {
+      await this.paymentService.handleWebhook(event);
+      return { success: true };
+    } catch (err) {
+      console.error('Failed to process webhook event:', err.message);
+      return { success: false, message: err.message };
+    }
   }
 }

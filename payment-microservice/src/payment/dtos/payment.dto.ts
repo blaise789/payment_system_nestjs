@@ -3,4 +3,5 @@ export class PaymentDto {
   currency: string;
   amount: number;
   quantity: number;
+  description?: string;
 }

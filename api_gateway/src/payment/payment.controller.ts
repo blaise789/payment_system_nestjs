@@ -15,11 +15,14 @@ import Stripe from 'stripe';
 
 @Controller('payment')
 export class PaymentController {
+  private readonly stripe: Stripe;
+
   constructor(
-    @Inject('STRIPE') private readonly stripe,
-    @Inject('CONFIG_SERVICE') private readonly configService: ConfigService,
+    private readonly configService: ConfigService,
     @Inject('NATS_SERVICE') private readonly natsClient: ClientProxy,
-  ) {}
+  ) {
+    this.stripe = new Stripe(configService.get('STRIPE_SECRET_KEY'));
+  }
   @Post()
   createCheckoutSession(@Body() payment: PaymentDto) {
     // this.natsClient.emit('payment_created', payment);
