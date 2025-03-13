@@ -10,4 +10,6 @@ export class PaymentDto {
   currency: string;
   @IsNumber()
   quantity: number;
+  @IsString()
+  description?: string;
 }
